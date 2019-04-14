@@ -1,0 +1,304 @@
+ practica dia 07/03/2019
+
+
+MySQL Shell 8.0.14
+
+Copyright (c) 2016, 2019, Oracle and/or its affiliates. All rights reserved.
+Oracle is a registered trademark of Oracle Corporation and/or its affiliates.
+Other names may be trademarks of their respective owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+
+MySQL JS> \sql
+Switching to SQL mode... Commands end with ;
+
+MySQL SQL> \connect --mc root@localhost
+Creating a Classic session to 'root@localhost'
+Fetching schema names for autocompletion... Press ^C to stop.
+Your MySQL connection id is 8
+Server version: 8.0.14 MySQL Community Server - GPL
+No default schema selected; type \use <schema> to set one.
+
+MySQL [localhost ssl] SQL> show databases
+                        -> ;
++--------------------+
+| Database           |
++--------------------+
+| bd                 |
+| eva_1              |
+| eva_2              |
+| information_schema |
+| inventarios        |
+| mysql              |
+| paises             |
+| performance_schema |
+| sakila             |
+| sys                |
+| world              |
++--------------------+
+11 rows in set (0.0235 sec)
+
+MySQL [localhost ssl] SQL> \eva_2
+Unknown command: '\eva_2'
+MySQL [localhost ssl] SQL> \ use eva_2
+Unknown command: '\ use eva_2'
+MySQL [localhost ssl] SQL> use eva:;
+MySQL Error 1049: Unknown database 'eva:'
+
+MySQL [localhost ssl] SQL> \use eva_2
+Default schema set to `eva_2`.
+Fetching table and column names from `eva_2` for auto-completion... Press ^C to
+stop.
+
+MySQL [localhost ssl/eva_2] SQL> show tables;
++-----------------+
+| Tables_in_eva_2 |
++-----------------+
+| detail          |
+| hijo            |
+| master          |
+| padre           |
++-----------------+
+4 rows in set (0.0050 sec)
+
+MySQL [localhost ssl/eva_2] SQL> create table master_2(
+                              -> id_master int key aunto_increment,
+                              -> id_2 varchar (50) key);
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that
+ corresponds to your MySQL server version for the right syntax to use near 'aunt
+o_increment,
+id_2 varchar (50) key)' at line 2
+
+MySQL [localhost ssl/eva_2] SQL> create table master_2( id_master int key auto_i
+ncrement, id_2 varchar (50) key);
+ERROR: 1068 (42000): Multiple primary key defined
+
+MySQL [localhost ssl/eva_2] SQL> create table master_2( id_master int key aunto_
+                                 create table master_2( id_master int,
+                              -> nombre varchar (10), primary key (id_master,
+                              -> nombre));
+Query OK, 0 rows affected (1.7107 sec)
+
+MySQL [localhost ssl/eva_2] SQL> alter table master_2 drop primary key ;
+Query OK, 0 rows affected (2.5787 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+
+MySQL [localhost ssl/eva_2] SQL> show create table maaster_2;
+ERROR: 1146 (42S02): Table 'eva_2.maaster_2' doesn't exist
+
+MySQL [localhost ssl/eva_2] SQL> show create table master_2;
++----------+--------------------------------------------------------------------
+--------------------------------------------------------------------------------
+----------+
+| Table    | Create Table
+
+          |
++----------+--------------------------------------------------------------------
+--------------------------------------------------------------------------------
+----------+
+| master_2 | CREATE TABLE `master_2` (
+  `id_master` int(11) NOT NULL,
+  `nombre` varchar(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci |
++----------+--------------------------------------------------------------------
+--------------------------------------------------------------------------------
+----------+
+1 row in set (0.0351 sec)
+
+MySQL [localhost ssl/eva_2] SQL> alter table master_2
+                              -> add primary key (id_master,nombre);
+Query OK, 0 rows affected (1.6201 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+
+MySQL [localhost ssl/eva_2] SQL> create table datail_2(
+                              -> id_datail int key auto_increment,
+                              -> id_master int,
+                              -> nombre varchar(10),
+                              -> foreign key (id_master,nombre)
+                              -> references master_2(id_master,nombre)
+                              -> );
+Query OK, 0 rows affected (1.0454 sec)
+
+MySQL [localhost ssl/eva_2] SQL> desc master_2;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| id_master | int(11)     | NO   | PRI | NULL    |       |
+| nombre    | varchar(10) | NO   | PRI | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+2 rows in set (0.0580 sec)
+
+MySQL [localhost ssl/eva_2] SQL> insert into master_2
+                              -> values (1,'hola'),(2,'mundo'),(3 'CRUEL');
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that
+ corresponds to your MySQL server version for the right syntax to use near ''CRU
+EL')' at line 2
+
+MySQL [localhost ssl/eva_2] SQL> insert into master_2 values (1,'hola'),(2,'mund
+o'),(3 'CRUEL');
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that
+ corresponds to your MySQL server version for the right syntax to use near ''CRU
+EL')' at line 1
+
+MySQL [localhost ssl/eva_2] SQL> insert into master_2(id_master,nombre) values (
+1,'hola'),(2,'mundo'),(3 'CRUEL');
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that
+ corresponds to your MySQL server version for the right syntax to use near ''CRU
+EL')' at line 1
+
+MySQL [localhost ssl/eva_2] SQL> insert into master_2(id_master,nombre) values (
+1,'hola'),(2,'mundo'),(3 'CRUEL');
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that
+ corresponds to your MySQL server version for the right syntax to use near ''CRU
+EL')' at line 1
+
+MySQL [localhost ssl/eva_2] SQL> insert into master_2 values (1,'hola'),(2,'mund
+o'),(3 'cruel');
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that
+ corresponds to your MySQL server version for the right syntax to use near ''cru
+el')' at line 1
+
+MySQL [localhost ssl/eva_2] SQL> insert into master_2 values (1,'hola'),(2,'mund
+o'),(3, 'cruel');
+Query OK, 3 rows affected (0.4111 sec)
+
+Records: 3  Duplicates: 0  Warnings: 0
+
+MySQL [localhost ssl/eva_2] SQL> desc master_2;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| id_master | int(11)     | NO   | PRI | NULL    |       |
+| nombre    | varchar(10) | NO   | PRI | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+2 rows in set (0.0051 sec)
+
+MySQL [localhost ssl/eva_2] SQL> select * from master_2,
+                              -> ;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that
+ corresponds to your MySQL server version for the right syntax to use near '' at
+ line 1
+
+MySQL [localhost ssl/eva_2] SQL> select * from master_2;
++-----------+--------+
+| id_master | nombre |
++-----------+--------+
+|         1 | hola   |
+|         2 | mundo  |
+|         3 | cruel  |
++-----------+--------+
+3 rows in set (0.0012 sec)
+
+MySQL [localhost ssl/eva_2] SQL> desc datail,
+                              ->
+                              ->
+                              -> ;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that
+ corresponds to your MySQL server version for the right syntax to use near ',' a
+t line 1
+
+MySQL [localhost ssl/eva_2] SQL> desc datail;
+ERROR: 1146 (42S02): Table 'eva_2.datail' doesn't exist
+
+MySQL [localhost ssl/eva_2] SQL> desc detail_2;
+ERROR: 1146 (42S02): Table 'eva_2.detail_2' doesn't exist
+
+MySQL [localhost ssl/eva_2] SQL> desc datail_2;
++-----------+-------------+------+-----+---------+----------------+
+| Field     | Type        | Null | Key | Default | Extra          |
++-----------+-------------+------+-----+---------+----------------+
+| id_datail | int(11)     | NO   | PRI | NULL    | auto_increment |
+| id_master | int(11)     | YES  | MUL | NULL    |                |
+| nombre    | varchar(10) | YES  |     | NULL    |                |
++-----------+-------------+------+-----+---------+----------------+
+3 rows in set (0.0062 sec)
+
+MySQL [localhost ssl/eva_2] SQL> insert into datail_2 values (1,'hola'),(2,'mund
+o'),(3, 'cruel');
+ERROR: 1136 (21S01): Column count doesn't match value count at row 1
+
+MySQL [localhost ssl/eva_2] SQL> insert into datail_2 values ('hola'),('mundo'),
+('cruel');
+ERROR: 1136 (21S01): Column count doesn't match value count at row 1
+
+MySQL [localhost ssl/eva_2] SQL> alter table datail_2 drop foreign key
+                              -> datail_2 ibfk_1;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that
+ corresponds to your MySQL server version for the right syntax to use near 'ibfk
+_1' at line 2
+
+MySQL [localhost ssl/eva_2] SQL> alter table datail_2 drop foreign key  datail_2
+
+
+
+
+
+
+
+
+
+
+
+
+ejercicio de clase
+
+
+MySQL [localhost ssl/eva_2] SQL> create table ventas_anuales ( annio int , cuart
+o int, ventas_totales double, primary key (annio,cuarto));
+Query OK, 0 rows affected (0.7463 sec)
+
+MySQL [localhost ssl/eva_2] SQL>
+
+
+
+MySQL [localhost ssl/eva_2] SQL> create table ordenes (
+                              -> id_orden int key auto_increment,
+                              -> annio int,
+                              -> cuarto int,
+                              -> fecha date,
+                              -> foreign key (annio,cuarto)
+                              -> references ventas_anuales (annio,cuarto)
+                              -> on delete cascade on update cascade);
+Query OK, 0 rows affected (0.7918 sec)
+
+
+MySQL [localhost ssl/eva_2] SQL> show create table ordenes;
++---------+---------------------------------------------------------------------
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+----------------------------------------------------+
+| Table   | Create Table
+
+
+
+
+                                                    |
++---------+---------------------------------------------------------------------
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+----------------------------------------------------+
+| ordenes | CREATE TABLE `ordenes` (
+  `id_orden` int(11) NOT NULL AUTO_INCREMENT,
+  `annio` int(11) DEFAULT NULL,
+  `cuarto` int(11) DEFAULT NULL,
+  `fecha` date DEFAULT NULL,
+  PRIMARY KEY (`id_orden`),
+  KEY `annio` (`annio`,`cuarto`),
+  CONSTRAINT `ordenes_ibfk_1` FOREIGN KEY (`annio`, `cuarto`) REFERENCES `ventas
+_anuales` (`annio`, `cuarto`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci |
++---------+---------------------------------------------------------------------
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+----------------------------------------------------+
+1 row in set (0.0051 sec)
+
+MySQL [localhost ssl/eva_2] SQL>

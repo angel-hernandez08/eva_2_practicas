@@ -1,0 +1,116 @@
+creacion de la base de datos
+
+MySQL [localhost ssl] SQL> show databases
+                        -> ;
++--------------------+
+| Database           |
++--------------------+
+| eva_1              |
+| information_schema |
+| inventarios        |
+| mysql              |
+| paises             |
+| performance_schema |
+| sakila             |
+| sys                |
+| world              |
++--------------------+
+9 rows in set (0.0031 sec)
+
+MySQL [localhost ssl] SQL> \use inventarios
+Default schema set to `inventarios`.
+Fetching table and column names from `inventarios` for auto-completion... Press
+^C to stop.
+
+MySQL [localhost ssl/inventarios] SQL> create table Recursos_Humanos ( id int (1
+5), pref_nombre varchar (10), nombre varchar (20), apellido varchar (20), genero
+ varchar (5), email varchar (20), nombre_del_padre varchar (15) , nombre_de_la_m
+adre varchar (15), nombre_soltera_dela_madre varchar (15), fecha_nacimiento date
+, edad int(10), peso int (10), fecha_de_inscripcion date, cuarto varchar (15), m
+itad_de_union varchar(10), year_de_ingreso int (10), mes_de_ingreso int (10), no
+mbre_del_mes varchar (20), abrev_mes varchar (10), dia_ingreso varchar (10), nom
+bre_del_dia varchar (20), abrev_del_dia varchar (15), tiempo_empresa int (10), s
+alario int (15), ultima_caminata dec(5,5), ssn int (15), numero_telefono int (15
+), cuidad varchar (25), condado varchar (25), cuidad2 varchar (25), estado varch
+ar (20), zip int (15) , region varchar (20), nombre_usuario varchar (20), passwo
+rd varchar (20));
+Query OK, 0 rows affected (0.7640 sec)
+
+MySQL [localhost ssl/inventarios] SQL> show tables;
++-----------------------+
+| Tables_in_inventarios |
++-----------------------+
+| recursos_humanos      |
++-----------------------+
+1 row in set (0.0047 sec)
+
+MySQL [localhost ssl/inventarios] SQL> load data infile ' C:\Users\Angel\Documen
+ts\base de dato ruben\EXAMEN\ recursos humanos.csv' into table Recursos_humanos
+fields terminated by  lines terminated '\n' (id, pref_nombre, nombre, apellido,
+genero, email, nombre_del_padre,  nombre_de_la_,madre, nombre_soltera_dela_madre
+, fecha_nacimiento, edad, peso, fecha_de_inscripcion, cuarto, mitad_de_union, ye
+ar_de_ingreso, mes_de_ingreso, nombre_del_mes, abrev_mes, dia_ingreso, nombre_de
+l_dia, abrev_del_dia, tiempo_empresa, salario, ultima_caminata, ssn, numero_tele
+fono,ciudad,condado, cuidad2, estado, zip, region, nombre_usuario, password);
+
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that
+ corresponds to your MySQL server version for the right syntax to use near 'line
+s terminated '\n' (id, pref_nombre, nombre, apellido, genero, email, nombre_' at
+ line 1
+
+
+
+
+
+
++------------------------------------------------
+| C:\ProgramData\MySQL\MySQL Server 8.0\Uploads\
+
+
+
+
+
+MySQL [localhost ssl/inventarios] SQL> select * from train into outfile
+                                    -> 'c:\programdata\MySL\MySQL server
+                                    '> 8.0\uploads\ recursos humanos.csv'
+                                    -> fields terminated by
+                                    -> ',';
+ERROR: 1146 (42S02): Table 'inventarios.train' doesn't exist
+
+
+
+
+
+
+
+
+
+
+MySQL [localhost ssl/inventarios] SQL> select @@global.secure_file_priv;
++------------------------------------------------+
+| @@global.secure_file_priv                      |
++------------------------------------------------+
+| C:\ProgramData\MySQL\MySQL Server 8.0\Uploads\ |
++------------------------------------------------+
+1 row in set (0.0012 sec)
+
+MySQL [localhost ssl/inventarios] SQL> SELECT * FROM train INTO
+                                    -> 'C;\ProgramaData\MySQL\MySQL Server
+                                    '> 8.0\Uploads\Recursos humanos.csv'
+                                    -> FIELDS TERMINATED BY',';
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that
+ corresponds to your MySQL server version for the right syntax to use near 'FIEL
+DS TERMINATED BY','' at line 4
+
+MySQL [localhost ssl/inventarios] SQL> SELECT * FROM train INTO   'C;\ProgramaDa
+ta\MySQL\MySQL Server 8.0\Uploads\RecurSELECT * FROM train INTO OUTFILE  'C;\Pro
+gramaData\MySQL\MySQL Server 8.0\Uploads\Recursos humanos.csv' FIELDS TERMINATED
+ BY',';
+ERROR: 1146 (42S02): Table 'inventarios.train' doesn't exist
+
+MySQL [localhost ssl/inventarios] SQL> SELECT * FROM train INTO OUTFILE  'C;\Pro
+gramaData\MySQL\MySQL Server 8.0\Uploads\Recursos humanos.csv' FIELDS TERMINATED
+ BY',';
+ERROR: 1146 (42S02): Table 'inventarios.train' doesn't exist
+
+MySQL [localhost ssl/inventarios] SQL>

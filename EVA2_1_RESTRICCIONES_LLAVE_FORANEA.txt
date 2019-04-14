@@ -1,0 +1,302 @@
+MySQL Shell 8.0.12
+
+Copyright (c) 2016, 2018, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+
+
+ MySQL  JS > \connect --mc root@localhost
+\connect [-mx|--mysqlx|-mc|--mysql|-ma] <URI>
+
+ MySQL  JS > \connect -mc root@localhost
+Creating a Classic session to 'root@localhost'
+Please provide the password for 'root@localhost': ****
+Save password for 'root@localhost:3306'? [Y]es/[N]o/Ne[v]er (default No): n
+Fetching schema names for autocompletion... Press ^C to stop.
+Your MySQL connection id is 8
+Server version: 8.0.12 MySQL Community Server - GPL
+No default schema selected; type \use <schema> to set one.
+
+ MySQL  localhost:3306 ssl  JS > \sql
+Switching to SQL mode... Commands end with ;
+
+ MySQL  localhost:3306 ssl  SQL > create database eva_2;
+Query OK, 1 row affected (0.2967 sec)
+
+ MySQL  localhost:3306 ssl  SQL > use eva_2
+Default schema set to `eva_2`.
+Fetching table and column names from `eva_2` for auto-completion... Press ^C to stop.
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > create table padre(id int key auto_increment, nombre varchar(50));
+Query OK, 0 rows affected (0.6722 sec)
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > desc padre;
++--------+-------------+------+-----+---------+----------------+
+| Field  | Type        | Null | Key | Default | Extra          |
++--------+-------------+------+-----+---------+----------------+
+| id     | int(11)     | NO   | PRI | NULL    | auto_increment |
+| nombre | varchar(50) | YES  |     | NULL    |                |
++--------+-------------+------+-----+---------+----------------+
+2 rows in set (0.0315 sec)
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > create table hijo(id int key auto_increment, id_padre int, foreign key(id_padre) references padre(id) on delete cascade on update cascade);
+Query OK, 0 rows affected (0.6032 sec)
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > desc hijo;
++----------+---------+------+-----+---------+----------------+
+| Field    | Type    | Null | Key | Default | Extra          |
++----------+---------+------+-----+---------+----------------+
+| id       | int(11) | NO   | PRI | NULL    | auto_increment |
+| id_padre | int(11) | YES  | MUL | NULL    |                |
++----------+---------+------+-----+---------+----------------+
+2 rows in set (0.0023 sec)
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > insert into hijo(id_padre) values(5),
+                                     ... ;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > insert into hijo(id_padre) values(5);
+ERROR: 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`eva_2`.`hijo`, CONSTRAINT `hijo_ibfk_1` FOREIGN KEY (`id_padre`) REFERENCES `padre` (`id`) ON DELETE CASCADE ON UPDATE CASCADE)
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > insert into padre(nombre) values('Flor');
+Query OK, 1 row affected (0.1297 sec)
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > insert into padre(nombre) values('Juan');
+Query OK, 1 row affected (0.0981 sec)
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > insert into padre(nombre) values('Rubén');
+Query OK, 1 row affected (0.0367 sec)
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > select * from padre;
++----+--------+
+| id | nombre |
++----+--------+
+|  1 | Flor   |
+|  2 | Juan   |
+|  3 | Rub??n |
++----+--------+
+3 rows in set (0.0004 sec)
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > insert into hijo(id_padre) values(2);
+Query OK, 1 row affected (0.0668 sec)
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > insert into hijo(id_padre) values(3);
+Query OK, 1 row affected (0.2076 sec)
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > insert into hijo(id_padre) values(1);
+Query OK, 1 row affected (0.0320 sec)
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > insert into hijo(id_padre) values(2);
+Query OK, 1 row affected (0.3619 sec)
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > insert into hijo(id_padre) values(5);
+ERROR: 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`eva_2`.`hijo`, CONSTRAINT `hijo_ibfk_1` FOREIGN KEY (`id_padre`) REFERENCES `padre` (`id`) ON DELETE CASCADE ON UPDATE CASCADE)
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > select * from hijo;
++----+----------+
+| id | id_padre |
++----+----------+
+|  4 |        1 |
+|  2 |        2 |
+|  5 |        2 |
+|  3 |        3 |
++----+----------+
+4 rows in set (0.0005 sec)
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > delete from padre where id=3;
+Query OK, 1 row affected (0.1077 sec)
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > select * from padre;
++----+--------+
+| id | nombre |
++----+--------+
+|  1 | Flor   |
+|  2 | Juan   |
++----+--------+
+2 rows in set (0.0004 sec)
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > select * from hijo;
++----+----------+
+| id | id_padre |
++----+----------+
+|  4 |        1 |
+|  2 |        2 |
+|  5 |        2 |
++----+----------+
+3 rows in set (0.0004 sec)
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > update padre set id=5 where id=2;
+Query OK, 1 row affected (0.0931 sec)
+
+Rows matched: 1  Changed: 1  Warnings: 0
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > select * from padre;
++----+--------+
+| id | nombre |
++----+--------+
+|  1 | Flor   |
+|  5 | Juan   |
++----+--------+
+2 rows in set (0.0004 sec)
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > select * from hijo;
++----+----------+
+| id | id_padre |
++----+----------+
+|  4 |        1 |
+|  2 |        5 |
+|  5 |        5 |
++----+----------+
+3 rows in set (0.0006 sec)
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > create table master(id int key auto_increment, name varchar(50));
+Query OK, 0 rows affected (0.3615 sec)
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > create table detail(id int key auto_increment, id_master int, foreign key(id_master) references master(id) on delete restrict on update cascade);
+Query OK, 0 rows affected (0.3017 sec)
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > desc master;
++-------+-------------+------+-----+---------+----------------+
+| Field | Type        | Null | Key | Default | Extra          |
++-------+-------------+------+-----+---------+----------------+
+| id    | int(11)     | NO   | PRI | NULL    | auto_increment |
+| name  | varchar(50) | YES  |     | NULL    |                |
++-------+-------------+------+-----+---------+----------------+
+2 rows in set (0.0024 sec)
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > desc detail;
++-----------+---------+------+-----+---------+----------------+
+| Field     | Type    | Null | Key | Default | Extra          |
++-----------+---------+------+-----+---------+----------------+
+| id        | int(11) | NO   | PRI | NULL    | auto_increment |
+| id_master | int(11) | YES  | MUL | NULL    |                |
++-----------+---------+------+-----+---------+----------------+
+2 rows in set (0.0023 sec)
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > insert into detail(id_master) values(1);
+ERROR: 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`eva_2`.`detail`, CONSTRAINT `detail_ibfk_1` FOREIGN KEY (`id_master`) REFERENCES `master` (`id`) ON UPDATE CASCADE)
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > insert into master(name) values("Ruben");
+Query OK, 1 row affected (0.1279 sec)
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > insert into master(name) values("Alice");
+Query OK, 1 row affected (0.7378 sec)
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > insert into master(name) values("Robby");
+Query OK, 1 row affected (0.0919 sec)
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > select * from master;
++----+-------+
+| id | name  |
++----+-------+
+|  1 | Ruben |
+|  2 | Alice |
+|  3 | Robby |
++----+-------+
+3 rows in set (0.0004 sec)
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > insert into detail(id_master) values(1);
+Query OK, 1 row affected (0.1225 sec)
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > insert into detail(id_master) values(2);
+Query OK, 1 row affected (0.6983 sec)
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > insert into detail(id_master) values(3);
+Query OK, 1 row affected (0.4268 sec)
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > insert into detail(id_master) values(1);
+Query OK, 1 row affected (0.1806 sec)
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > insert into detail(id_master) values(3);
+Query OK, 1 row affected (0.0449 sec)
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > insert into detail(id_master) values(8);
+ERROR: 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`eva_2`.`detail`, CONSTRAINT `detail_ibfk_1` FOREIGN KEY (`id_master`) REFERENCES `master` (`id`) ON UPDATE CASCADE)
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > select * from detail;
++----+-----------+
+| id | id_master |
++----+-----------+
+|  2 |         1 |
+|  5 |         1 |
+|  3 |         2 |
+|  4 |         3 |
+|  6 |         3 |
++----+-----------+
+5 rows in set (0.0004 sec)
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > insert into master(name) values("otro");
+Query OK, 1 row affected (0.4080 sec)
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > select+ from master;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from master' at line 1
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > select * from master;
++----+-------+
+| id | name  |
++----+-------+
+|  1 | Ruben |
+|  2 | Alice |
+|  3 | Robby |
+|  4 | otro  |
++----+-------+
+4 rows in set (0.0004 sec)
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > delete from master where id=4;
+Query OK, 1 row affected (0.0932 sec)
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > delete from master where id=3;
+ERROR: 1451 (23000): Cannot delete or update a parent row: a foreign key constraint fails (`eva_2`.`detail`, CONSTRAINT `detail_ibfk_1` FOREIGN KEY (`id_master`) REFERENCES `master` (`id`) ON UPDATE CASCADE)
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > select * from detail where id_master=3;
++----+-----------+
+| id | id_master |
++----+-----------+
+|  4 |         3 |
+|  6 |         3 |
++----+-----------+
+2 rows in set (0.0005 sec)
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > delete from detail where id_master=3;
+Query OK, 2 rows affected (0.1140 sec)
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > delete from master where id=3;
+Query OK, 1 row affected (0.0957 sec)
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > select * from master;
++----+-------+
+| id | name  |
++----+-------+
+|  1 | Ruben |
+|  2 | Alice |
++----+-------+
+2 rows in set (0.0004 sec)
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > select * from detail
+                                     ... ;
++----+-----------+
+| id | id_master |
++----+-----------+
+|  2 |         1 |
+|  5 |         1 |
+|  3 |         2 |
++----+-----------+
+3 rows in set (0.0004 sec)
+
+ MySQL  localhost:3306 ssl  eva_2  SQL > show create table detail;
++--------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Table  | Create Table                                                                                                                                                                                                                                                                                                                                       |
++--------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| detail | CREATE TABLE `detail` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_master` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id_master` (`id_master`),
+  CONSTRAINT `detail_ibfk_1` FOREIGN KEY (`id_master`) REFERENCES `master` (`id`) ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci |
++--------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.0107 sec)
